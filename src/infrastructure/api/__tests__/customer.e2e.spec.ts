@@ -1,4 +1,3 @@
-import Address from "../../../domain/customer/value-object/address";
 import { app, sequelize } from "../express";
 import request from "supertest";
 
@@ -115,9 +114,7 @@ describe("E2E test for customer", () => {
     
         expect(customer.status).toBe(200);
 
-        const response = await request(app).get("/customer/find").send({
-            id: customer.body.id
-        });
+        const response = await request(app).get(`/customer/${customer.body.id}`);
     
         expect(response.status).toBe(200);
         expect(response.body.name).toEqual("Jhon");
@@ -129,9 +126,7 @@ describe("E2E test for customer", () => {
 
     it("should no find a customer", async () => {
 
-        const response = await request(app).get("/customer/find").send({
-            id: "55"
-        });
+        const response = await request(app).get("/customer/55");
     
         expect(response.status).toBe(500);
     });
@@ -153,7 +148,7 @@ describe("E2E test for customer", () => {
 
     expect(customer.status).toBe(200);
 
-    const response = await request(app).get("/customer/update").send({
+    const response = await request(app).put("/customer/update").send({
         id: customer.body.id,
         name:"JhonUpdate",
         address: {
@@ -174,7 +169,7 @@ describe("E2E test for customer", () => {
     });
 
     it("should no update a customer", async () => {
-        const response = await request(app).get("/customer/update").send({});
+        const response = await request(app).put("/customer/update").send({});
         expect(response.status).toBe(500);
     });
 });

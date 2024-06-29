@@ -48,11 +48,15 @@ customerRouter.get('/', async (req: Request, res: Response) => {
 });
 
 
-customerRouter.get('/find/', async (req: Request, res: Response) => {
+customerRouter.get('/:id', async (req: Request, res: Response) => {
     const usecase = new FindCustomerUseCase(new CustomerRepository());
 
     try {
-        const output = await usecase.execute(req.body);
+        const id = req.params.id;
+        
+        const output = await usecase.execute({
+            id: id,
+        });
 
         res.send(output);
 
@@ -62,7 +66,7 @@ customerRouter.get('/find/', async (req: Request, res: Response) => {
     }
 
 
-    customerRouter.get('/update/', async (req: Request, res: Response) => {
+    customerRouter.put('/update/', async (req: Request, res: Response) => {
         const usecase = new UpdateCustomeUseCase(new CustomerRepository());
 
     try {
