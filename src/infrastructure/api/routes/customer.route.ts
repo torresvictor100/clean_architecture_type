@@ -5,6 +5,7 @@ import CustomerRepository from "../../customer/repository/sequelize/customer.rep
 import ListCustomerUseCase from "../../../usecase/customer/list/list.custome.usecase";
 import FindCustomerUseCase from "../../../usecase/customer/find/find.customer.usecase";
 import UpdateCustomeUseCase from "../../../usecase/customer/update/update.customer.usecase";
+import CustomerPresenter from "../presenters/customer.presenter";
 
 export const customerRouter = express.Router();
 
@@ -39,7 +40,10 @@ customerRouter.get('/', async (req: Request, res: Response) => {
         if (output.customers.length === 0) {
             res.sendStatus(404);
         } else {
-            res.send(output);
+            res.format({
+                json: async () => res.send(output),
+                xml: async () => res.send(CustomerPresenter.listXML(output)),
+            })
         }
 
     }catch(err){
