@@ -4,6 +4,7 @@ import ProductRepository from "../../product/repository/sequelize/product.reposi
 import ListProductUseCase from "../../../usecase/product/list/list.product.usecase";
 import FindProductUseCase from "../../../usecase/product/find/find.product.usecase";
 import UpdateProductUseCase from "../../../usecase/product/update/update.product.usecase";
+import ProductPresenter from "../presenters/product.presenter";
 
 export const productRouter = express.Router();
 
@@ -32,7 +33,10 @@ productRouter.get('/', async (req:Request, res: Response) => {
         if (output.products.length === 0) {
             res.sendStatus(404);
         } else {
-            res.send(output);
+            res.format({
+                json: async () => res.send(output),
+                xml: async () => res.send(ProductPresenter.listXML(output)),
+            })
         }
 
     }catch(err){
